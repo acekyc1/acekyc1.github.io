@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kristina - Quantitative Research</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #fafaf9;
+            --bg-secondary: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #525252;
+            --accent: #a78bfa;
+            --accent-hover: #8b5cf6;
+            --border: #e7e5e4;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 16px;
+            letter-spacing: -0.011em;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(250, 250, 249, 0.8);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            padding: 1.5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+            letter-spacing: 0.02em;
+        }
+
+        nav a:hover {
+            color: var(--text-primary);
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            letter-spacing: -0.04em;
+            color: var(--text-primary);
+            animation: fadeIn 1s ease;
+        }
+
+        .hero-subtitle {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease 0.2s both;
+        }
+
+        .tag {
+            padding: 0.5rem 1.2rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            letter-spacing: 0.01em;
+        }
+
+        .scroll-indicator {
+            margin-top: 4rem;
+            animation: fadeIn 1s ease 0.4s both;
+        }
+
+        .scroll-indicator span {
+            display: block;
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, var(--accent), transparent);
+            margin: 0 auto;
+            animation: scroll 2s ease-in-out infinite;
+        }
+
+        section {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 3rem;
+            letter-spacing: -0.03em;
+            color: var(--text-primary);
+        }
+
+        .expertise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .expertise-card {
+            padding: 2.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .expertise-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+        }
+
+        .expertise-card h3 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .expertise-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .research-areas {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 3rem;
+            margin: 4rem 0;
+        }
+
+        .research-list {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .research-item {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            padding: 1.5rem;
+            border-left: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .research-item:hover {
+            border-left-color: var(--accent);
+            background: var(--bg-primary);
+        }
+
+        .research-item h4 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .research-item p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .methodologies {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .method-tag {
+            padding: 1rem 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .method-tag:hover {
+            border-color: var(--accent);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .contact-section {
+            text-align: center;
+            padding: 8rem 2rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+        }
+
+        .contact-section h2 {
+            margin-bottom: 2rem;
+        }
+
+        .contact-section p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            padding: 1rem 2rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .contact-link:hover {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scroll {
+            0%, 100% {
+                transform: translateY(0);
+                opacity: 0;
+            }
+            50% {
+                transform: translateY(20px);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            nav ul {
+                gap: 1.5rem;
+            }
+            
+            .expertise-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#expertise">Expertise</a></li>
+            <li><a href="#research">Research</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Hi, this is Kristina</h1>
+            <div class="hero-subtitle">
+                <span class="tag">Quant Research</span>
+                <span class="tag">Systematic Strategies</span>
+                <span class="tag">Data Science</span>
+                <span class="tag">Machine Learning</span>
+            </div>
+            <div class="scroll-indicator">
+                <span></span>
+            </div>
+        </div>
+    </section>
+
+    <section id="expertise">
+        <h2>Expertise</h2>
+        <div class="expertise-grid">
+            <div class="expertise-card">
+                <h3>Quantitative Research</h3>
+                <p>Developing systematic trading strategies through rigorous statistical analysis and mathematical modeling, with focus on alpha generation and risk management.</p>
+            </div>
+            <div class="expertise-card">
+                <h3>Systematic Strategies</h3>
+                <p>Designing and implementing automated trading systems that combine market microstructure insights with advanced signal processing techniques.</p>
+            </div>
+            <div class="expertise-card">
+                <h3>Data Science</h3>
+                <p>Extracting actionable insights from complex financial datasets using statistical inference, time series analysis, and predictive modeling.</p>
+            </div>
+            <div class="expertise-card">
+                <h3>Machine Learning</h3>
+                <p>Applying state-of-the-art ML techniques to financial markets, including deep learning, ensemble methods, and reinforcement learning for portfolio optimization.</p>
+            </div>
+        </div>
+
+        <div class="research-areas">
+            <h2>Research Focus</h2>
+            <div class="research-list">
+                <div class="research-item">
+                    <div>
+                        <h4>Market Microstructure Analysis</h4>
+                        <p>Investigating price formation mechanisms, order flow dynamics, and liquidity patterns across global markets to identify inefficiencies and optimize execution strategies.</p>
+                    </div>
+                </div>
+                <div class="research-item">
+                    <div>
+                        <h4>Alternative Data Integration</h4>
+                        <p>Synthesizing non-traditional data sources including sentiment analysis, satellite imagery, and network graphs to generate novel alpha signals with low correlation to traditional factors.</p>
+                    </div>
+                </div>
+                <div class="research-item">
+                    <div>
+                        <h4>Portfolio Construction & Risk</h4>
+                        <p>Developing robust portfolio optimization frameworks that balance expected returns against tail risk, drawdown constraints, and transaction costs in multi-asset contexts.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2>Methodologies</h2>
+        <div class="methodologies">
+            <div class="method-tag">Time Series Forecasting</div>
+            <div class="method-tag">Statistical Arbitrage</div>
+            <div class="method-tag">Deep Neural Networks</div>
+            <div class="method-tag">Bayesian Inference</div>
+            <div class="method-tag">NLP & Sentiment</div>
+            <div class="method-tag">Reinforcement Learning</div>
+            <div class="method-tag">Factor Models</div>
+            <div class="method-tag">High-Frequency Analysis</div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <h2>Let's Connect</h2>
+        <p>Interested in discussing quantitative research, systematic strategies, or collaboration opportunities.</p>
+        <div class="contact-links">
+            <a href="mailto:kristina@example.com" class="contact-link">Email</a>
+            <a href="#" class="contact-link">LinkedIn</a>
+            <a href="#" class="contact-link">GitHub</a>
+            <a href="#" class="contact-link">Research Papers</a>
+        </div>
+    </section>
+</body>
+</html>
