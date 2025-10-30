@@ -5,6 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kristina - Quantitative Research</title>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tiempos+Text:wght@400;600&display=swap');
 
@@ -280,10 +290,142 @@
             transform: translateY(-2px);
         }
 
+        /* Hidden Analytics Access - Press Ctrl+Shift+A */
+        .analytics-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            backdrop-filter: blur(4px);
+        }
+
+        .analytics-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .analytics-content {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 3rem;
+            max-width: 900px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        .analytics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .analytics-header h2 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .visitors-list {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .visitors-list h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .visitor-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .visitor-item:last-child {
+            border-bottom: none;
+        }
+
+        .visitor-item strong {
+            color: var(--text-primary);
+        }
+
+        .visitor-item span {
+            color: var(--text-secondary);
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
                 transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
             }
 
             to {
@@ -321,6 +463,15 @@
 
             .expertise-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .analytics-content {
+                padding: 2rem;
+            }
+
+            .visitor-item {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
             }
         }
 
@@ -418,8 +569,7 @@
                     <div>
                         <h4>Alternative Data Research</h4>
                         <p>Synthesizing non-traditional data sources to generate novel alpha signals with low
-                            correlation to traditional
-                            factors</p>
+                            correlation to traditional factors</p>
                     </div>
                 </div>
                 <div class="research-item">
@@ -461,6 +611,212 @@
             <a href="https://acekyc1.github.io/" class="contact-link">GitHub</a>
         </div>
     </section>
+
+    <!-- Hidden Analytics Modal - Access with Ctrl+Shift+A -->
+    <div id="analyticsModal" class="analytics-modal" onclick="closeModalOnBackdrop(event)">
+        <div class="analytics-content">
+            <div class="analytics-header">
+                <h2>Website Analytics</h2>
+                <button class="close-btn" onclick="toggleAnalytics()">×</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalVisits">0</div>
+                    <div class="stat-label">Total Visits</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="uniqueVisitors">0</div>
+                    <div class="stat-label">Unique Visitors</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="todayVisits">0</div>
+                    <div class="stat-label">Today's Visits</div>
+                </div>
+            </div>
+
+            <div class="visitors-list">
+                <h3>Recent Visitors</h3>
+                <div id="visitorsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generate a simple fingerprint for visitor identification
+        function generateFingerprint() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.textBaseline = 'top';
+            ctx.font = '14px Arial';
+            ctx.fillText('fingerprint', 2, 2);
+            const fingerprint = canvas.toDataURL();
+
+            const data = [
+                navigator.userAgent,
+                navigator.language,
+                screen.colorDepth,
+                screen.width + 'x' + screen.height,
+                new Date().getTimezoneOffset(),
+                fingerprint
+            ].join('|');
+
+            // Simple hash function
+            let hash = 0;
+            for (let i = 0; i < data.length; i++) {
+                const char = data.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return Math.abs(hash).toString(36);
+        }
+
+        // Get approximate location from timezone
+        function getApproximateLocation() {
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            return timezone || 'Unknown';
+        }
+
+        // Track visitor silently
+        async function trackVisitor() {
+            try {
+                const fingerprint = generateFingerprint();
+                const location = getApproximateLocation();
+                const timestamp = new Date().toISOString();
+
+                // Get existing visitor data
+                let visitorData;
+                try {
+                    const result = await window.storage.get(`visitor:${fingerprint}`, true);
+                    visitorData = result ? JSON.parse(result.value) : null;
+                } catch (e) {
+                    visitorData = null;
+                }
+
+                if (visitorData) {
+                    // Existing visitor
+                    visitorData.visitCount++;
+                    visitorData.lastVisit = timestamp;
+                    visitorData.visits.push(timestamp);
+                } else {
+                    // New visitor
+                    visitorData = {
+                        fingerprint,
+                        location,
+                        firstVisit: timestamp,
+                        lastVisit: timestamp,
+                        visitCount: 1,
+                        visits: [timestamp]
+                    };
+                }
+
+                // Save visitor data
+                await window.storage.set(`visitor:${fingerprint}`, JSON.stringify(visitorData), true);
+
+            } catch (error) {
+                console.error('Tracking error:', error);
+            }
+        }
+
+        // Load analytics data
+        async function loadAnalytics() {
+            try {
+                const visitors = [];
+
+                // Get all visitor keys
+                const keys = await window.storage.list('visitor:', true);
+
+                if (keys && keys.keys) {
+                    for (const key of keys.keys) {
+                        try {
+                            const result = await window.storage.get(key, true);
+                            if (result) {
+                                visitors.push(JSON.parse(result.value));
+                            }
+                        } catch (e) {
+                            console.error('Error loading visitor:', e);
+                        }
+                    }
+                }
+
+                // Calculate statistics
+                const totalVisits = visitors.reduce((sum, v) => sum + v.visitCount, 0);
+                const uniqueVisitors = visitors.length;
+
+                const today = new Date().toDateString();
+                const todayVisits = visitors.reduce((sum, v) => {
+                    const todayVisitsCount = v.visits.filter(visit =>
+                        new Date(visit).toDateString() === today
+                    ).length;
+                    return sum + todayVisitsCount;
+                }, 0);
+
+                // Update UI
+                document.getElementById('totalVisits').textContent = totalVisits;
+                document.getElementById('uniqueVisitors').textContent = uniqueVisitors;
+                document.getElementById('todayVisits').textContent = todayVisits;
+
+                // Display visitors list
+                const visitorsList = document.getElementById('visitorsList');
+                visitorsList.innerHTML = '';
+
+                if (visitors.length === 0) {
+                    visitorsList.innerHTML = '<p style="color: var(--text-secondary); text-align: center;">No visitors yet</p>';
+                } else {
+                    // Sort by last visit
+                    visitors.sort((a, b) => new Date(b.lastVisit) - new Date(a.lastVisit));
+
+                    visitors.slice(0, 20).forEach(visitor => {
+                        const item = document.createElement('div');
+                        item.className = 'visitor-item';
+
+                        const lastVisit = new Date(visitor.lastVisit);
+                        const formattedDate = lastVisit.toLocaleString();
+
+                        item.innerHTML = `
+                            <div><strong>Location:</strong> <span>${visitor.location}</span></div>
+                            <div><strong>Visits:</strong> <span>${visitor.visitCount}</span></div>
+                            <div><strong>Last Visit:</strong> <span>${formattedDate}</span></div>
+                        `;
+                        visitorsList.appendChild(item);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading analytics:', error);
+                document.getElementById('visitorsList').innerHTML =
+                    '<p style="color: var(--text-secondary); text-align: center;">Error loading analytics data</p>';
+            }
+        }
+
+        // Toggle analytics modal (hidden - only accessible via keyboard shortcut)
+        function toggleAnalytics() {
+            const modal = document.getElementById('analyticsModal');
+            if (modal.classList.contains('active')) {
+                modal.classList.remove('active');
+            } else {
+                modal.classList.add('active');
+                loadAnalytics();
+            }
+        }
+
+        // Close modal when clicking backdrop
+        function closeModalOnBackdrop(event) {
+            if (event.target.id === 'analyticsModal') {
+                toggleAnalytics();
+            }
+        }
+
+        // Hidden keyboard shortcut: Ctrl+Shift+A to access analytics
+        document.addEventListener('keydown', function (event) {
+            if (event.ctrlKey && event.shiftKey && event.key === 'A') {
+                event.preventDefault();
+                toggleAnalytics();
+            }
+        });
+
+        // Track visitor on page load (silent)
+        window.addEventListener('load', trackVisitor);
+    </script>
 </body>
 
 </html>
